@@ -1,0 +1,6 @@
+# Pycharm project files
+.idea
+.idea/*
+
+# Project ignorable files
+.DS_Store
