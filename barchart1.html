@@ -31,10 +31,19 @@
         shape-rendering: crispEdges;
     }
 
+    .circles {
+
+    }
+
     .circles .point {
         fill: steelblue;
     }
 
+    .lines path {
+        /*stroke: steelblue;*/
+        stroke-width: 2;
+        fill: none;
+    }
 
     </style>
 </head>
@@ -45,7 +54,8 @@
 
     <svg class="circles"></svg>
 
-    <svg class="polys"></svg>
-    <script src="barchart1.js"></script>
+    <svg class="lines"></svg>
+    <script src="barchart.js"></script>
+    <script src="linechart.js"></script>
 </body>
 </html>

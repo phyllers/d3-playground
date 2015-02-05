@@ -24,7 +24,7 @@ $(document).on('ready', function(){
         right: 20,
         bottom: 40,
         left: 40
-    }
+    };
     var width = 600 - margin.left - margin.right;
     var height = 500 - margin.top - margin.bottom;
     var barwidth = 20;
@@ -51,14 +51,6 @@ $(document).on('ready', function(){
         .append('g')
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-    function fade(opacity) {
-        return function(g) {
-            circles.selectAll('.circles .point')
-                .filter(function(d) { return d.name != g.name; })
-                .transition()
-                .style('opacity', opacity);
-        }
-    }
 
     barchart1.append('g')
         .attr('class', 'x axis')
@@ -78,10 +70,20 @@ $(document).on('ready', function(){
         .attr('height', function(d) { return height - y(d.value); })
         .attr('width', x.rangeBand());
 
-    d3.select('.barchart1')
-        .style('background-color', 'white')
-        .transition()
-        .style('background-color', 'silver');
+    barchart1.selectAll('rect')
+        .on('mouseenter', function() {
+            console.log('over');
+            d3.select(this).style('fill', 'orange');
+        })
+        .on('mouseleave', function() {
+            console.log('out');
+            d3.select(this).style('fill', 'steelblue');
+        });
+
+//    d3.select('.barchart1')
+//        .style('background-color', 'white')
+//        .transition()
+//        .style('background-color', 'silver');
 
     var circles = d3.select('.circles')
         .attr('width', width)
@@ -94,25 +96,28 @@ $(document).on('ready', function(){
         .attr('cx', function(d) { return d.value * 10; })
         .attr('cy', '100')
         .attr('r', function(d) { return d.value; })
+//        .attr('pointer-events', 'all')
         .on('mouseover', fade(0.1))
         .on('mouseout', fade(1));
 
 
-    circles.selectAll('.point')
-        .data(exit_data)
-        .exit().transition()
-        .duration(500)
-        .ease('linear')
-        .each(function(d) {
-            d3.select(this).transition().style('opacity', 0).remove();
-        });
+//    circles.selectAll('.point')
+//        .data(exit_data)
+//        .exit().transition()
+//        .duration(500)
+//        .ease('linear')
+//        .each(function(d) {
+//            d3.select(this).transition().style('opacity', 0).remove();
+//        });
 
-
-    var polys = d3.select('.polys')
-        .attr('width', width)
-        .attr('height', height);
-
-
+    function fade(opacity) {
+        return function(g) {
+            circles.selectAll('.circles .point')
+                .filter(function(d) { return d.name != g.name; })
+                .transition()
+                .style('opacity', opacity);
+        }
+    }
 
     function type(d) {
         d.value = +d.value;
