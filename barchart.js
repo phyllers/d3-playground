@@ -72,12 +72,10 @@ $(document).on('ready', function(){
 
     barchart1.selectAll('rect')
         .on('mouseenter', function() {
-            console.log('over');
-            d3.select(this).style('fill', 'orange');
+            d3.select(this).transition().style('fill', 'orange');
         })
         .on('mouseleave', function() {
-            console.log('out');
-            d3.select(this).style('fill', 'steelblue');
+            d3.select(this).transition().style('fill', 'steelblue');
         });
 
 //    d3.select('.barchart1')
@@ -85,9 +83,26 @@ $(document).on('ready', function(){
 //        .transition()
 //        .style('background-color', 'silver');
 
+    var tip = d3.tip()
+        .attr('class', 'd3-tip')
+        .direction('n')
+        .offset([-10, 0])
+        .html(function(d) {
+            return "<strong>" + d.name + "</strong>";
+        });
+
+    var arcs = d3.svg.arc()
+        .innerRadius(function(d) { return d.value - 1; })
+        .outerRadius(function(d) { return d.value; })
+        .startAngle(0.25 * Math.PI)
+        .endAngle(0.75 * Math.PI);
+//        .attr('transform', function(d) { return 'translate(' + d.value + ',100)'; });
+
     var circles = d3.select('.circles')
         .attr('width', width)
         .attr('height', height);
+
+    circles.call(tip);
 
     circles.selectAll('.point')
         .data(data)
@@ -96,10 +111,23 @@ $(document).on('ready', function(){
         .attr('cx', function(d) { return d.value * 10; })
         .attr('cy', '100')
         .attr('r', function(d) { return d.value; })
-//        .attr('pointer-events', 'all')
-        .on('mouseover', fade(0.1))
-        .on('mouseout', fade(1));
+        .on('mouseover.fade', fade(0.1))
+        .on('mouseover.tip', tip.show)
+        .on('mouseout.fade', fade(1))
+        .on('mouseout.tip', tip.hide);
 
+    circles.selectAll('.arc')
+        .data(data)
+        .enter().append('path')
+        .attr('class', 'arc')
+        .attr('d', arcs)
+        .attr('transform', function(d) { return 'translate(' + d.value * 10 + ',100)'; });
+
+
+//    circles.append('path')
+//        .attr('class', 'arc')
+//        .attr('d', arcs)
+//        .attr('transform', 'translate(100,100)');
 
 //    circles.selectAll('.point')
 //        .data(exit_data)

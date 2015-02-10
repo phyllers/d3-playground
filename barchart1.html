@@ -6,6 +6,7 @@
     <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
     <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="d3-tip.js"></script>
 
     <style>
 
@@ -39,12 +40,27 @@
         fill: steelblue;
     }
 
+    .d3-tip {
+        border: 1px solid steelblue;
+        border-radius: 5px;
+        color: steelblue;
+        font-family: sans-serif;
+        padding: 5px 10px;
+    }
+
     .lines path {
         /*stroke: steelblue;*/
         stroke-width: 2;
         fill: none;
     }
 
+    .circles .arc {
+        fill: red;
+    }
+
+    .violin {
+        fill:none;
+    }
     </style>
 </head>
 <body>
@@ -55,7 +71,13 @@
     <svg class="circles"></svg>
 
     <svg class="lines"></svg>
+
+    <svg class="scatter"></svg>
+
+    <svg class="violin"></svg>
     <script src="barchart.js"></script>
     <script src="linechart.js"></script>
+    <script src="scatter.js"></script>
+    <script src="violin.js"></script>
 </body>
 </html>
