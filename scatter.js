@@ -32,6 +32,42 @@ $(document).on('ready', function(){
         .orient('left')
         .ticks(5);
 
+    // Clear the previously-active brush, if any.
+    var brushstart = function(p) {
+//        if (brushCell !== this) {
+//            d3.select(brushCell).call(brush.clear());
+//        var e = brush.extent();
+//
+//        console.log('start: ' + e);
+//            x.domain(p.x);
+//            y.domain(p.y);
+//            brushCell = this;
+//        }
+    };
+
+    // Highlight the selected circles.
+    var brushmove = function(p) {
+        var e = brush.extent();
+        scatter.selectAll("circle").classed("hidden", function(d) {
+            return e[0][0] > d[0] || d[0] > e[1][0]
+              || e[0][1] > d[1] || d[1] > e[1][1];
+            });
+    };
+
+    // If the brush is empty, select all circles.
+    var brushend = function() {
+        if (brush.empty()) scatter.selectAll(".hidden").classed("hidden", false);
+    };
+
+    var brush = d3.svg.brush()
+        .x(x)
+        .y(y)
+//        .extent([[0,0],[100,100]])
+//        .on('brushstart', brushstart)
+        .on('brush', brushmove)
+        .on('brushend', brushend);
+
+
     var scatter = d3.select('.scatter')
         .attr('width', width + margin.left + margin.right)
         .attr('height', height + margin.top + margin.bottom)
@@ -57,4 +93,7 @@ $(document).on('ready', function(){
         .attr('class', 'y axis')
         .call(yAxis);
 
-})
+    scatter.append('g')
+        .attr('class', 'brush')
+        .call(brush);
+});
